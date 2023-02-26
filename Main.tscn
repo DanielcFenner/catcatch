@@ -1,0 +1,138 @@
+[gd_scene load_steps=16 format=3 uid="uid://bf1pyf1bi8pa8"]
+
+[ext_resource type="PackedScene" uid="uid://bovbts750pvhq" path="res://Player.tscn" id="1_0ugsw"]
+[ext_resource type="Script" path="res://Main.gd" id="1_fac4u"]
+[ext_resource type="PackedScene" uid="uid://cqxri1bmq7bq" path="res://Drop.tscn" id="2_nmgsj"]
+[ext_resource type="Texture2D" uid="uid://b6wgdsbqbfriw" path="res://Sprites/1.png" id="3_t2ybi"]
+[ext_resource type="PackedScene" uid="uid://o6ch38h6uqwa" path="res://HUD.tscn" id="4_6uo3d"]
+[ext_resource type="AudioStream" uid="uid://b5nignjyjboy0" path="res://Music/8Bit Mini Gamer Loop.wav" id="5_6gbii"]
+[ext_resource type="AudioStream" uid="uid://cy3neynngenid" path="res://Sounds/Fruit collect 1.wav" id="6_e7oi3"]
+[ext_resource type="Script" path="res://FPSCounter.gd" id="8_2krea"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sugej"]
+blend_mode = 2
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_nla4w"]
+blend_mode = 2
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_c3reu"]
+blend_mode = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_121c0"]
+size = Vector2(46, 184)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2p7ov"]
+size = Vector2(414, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbl3a"]
+size = Vector2(48, 184)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8e8ss"]
+size = Vector2(413, 51)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_fac4u")
+drop_scene = ExtResource("2_nmgsj")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Main" type="ColorRect" parent="Background"]
+visible = false
+offset_right = 320.0
+offset_bottom = 180.0
+color = Color(0.0588235, 0.0901961, 0.12549, 1)
+
+[node name="Col1" type="ColorRect" parent="Background"]
+material = SubResource("CanvasItemMaterial_sugej")
+offset_left = 92.0
+offset_right = 138.0
+offset_bottom = 180.0
+color = Color(0.00392157, 0.0117647, 0.027451, 1)
+
+[node name="Col2" type="ColorRect" parent="Background"]
+material = SubResource("CanvasItemMaterial_nla4w")
+offset_left = 138.0
+offset_right = 184.0
+offset_bottom = 180.0
+color = Color(0.00784314, 0.0313726, 0.0745098, 1)
+
+[node name="Col3" type="ColorRect" parent="Background"]
+material = SubResource("CanvasItemMaterial_c3reu")
+offset_left = 184.0
+offset_right = 230.0
+offset_bottom = 180.0
+color = Color(0.00392157, 0.0117647, 0.027451, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background"]
+z_index = -1
+texture_filter = 1
+position = Vector2(163, 97)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_t2ybi")
+
+[node name="Player" parent="." instance=ExtResource("1_0ugsw")]
+position = Vector2(160, 164)
+
+[node name="Spawners" type="Node2D" parent="."]
+
+[node name="Spawn1" type="Node2D" parent="Spawners"]
+position = Vector2(115, -13)
+
+[node name="Spawn2" type="Node2D" parent="Spawners"]
+position = Vector2(160, -13)
+
+[node name="Spawn3" type="Node2D" parent="Spawners"]
+position = Vector2(207, -13)
+
+[node name="SpawnTimer" type="Timer" parent="Spawners"]
+wait_time = 0.5
+autostart = true
+
+[node name="InvisibleWalls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="InvisibleWalls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InvisibleWalls/StaticBody2D"]
+position = Vector2(-23, 92)
+shape = SubResource("RectangleShape2D_121c0")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InvisibleWalls/StaticBody2D"]
+position = Vector2(161, 205)
+shape = SubResource("RectangleShape2D_2p7ov")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="InvisibleWalls/StaticBody2D"]
+position = Vector2(344, 92)
+shape = SubResource("RectangleShape2D_bbl3a")
+
+[node name="Area2D" type="Area2D" parent="InvisibleWalls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InvisibleWalls/Area2D"]
+position = Vector2(161.5, 204.5)
+shape = SubResource("RectangleShape2D_8e8ss")
+
+[node name="HUD" parent="." instance=ExtResource("4_6uo3d")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_bottom = 0.0
+offset_left = 181.0
+offset_right = 181.0
+grow_horizontal = 0
+grow_vertical = 1
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_6gbii")
+autoplay = true
+
+[node name="Catch" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_e7oi3")
+volume_db = 10.0
+
+[node name="FPSCounter" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("8_2krea")
+
+[connection signal="catch" from="Player" to="." method="_on_player_catch"]
+[connection signal="timeout" from="Spawners/SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="body_entered" from="InvisibleWalls/Area2D" to="." method="_on_area_2d_body_entered"]
