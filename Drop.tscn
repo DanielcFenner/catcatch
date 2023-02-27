@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Drop.gd" id="1_vrsen"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_og5dg"]
-bounce = 0.25
+bounce = 0.5
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_esw5p"]
 atlas = ExtResource("1_fbs8j")
@@ -438,6 +438,7 @@ animations = [{
 radius = 6.08276
 
 [node name="Drop" type="RigidBody2D" groups=["drops"]]
+collision_layer = 2
 mass = 0.25
 physics_material_override = SubResource("PhysicsMaterial_og5dg")
 gravity_scale = 0.15

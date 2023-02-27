@@ -3,7 +3,6 @@ extends Area2D
 signal catch
 signal death
 
-var lives = 3
 var speed = 500
 var	default_position = 164
 var left_position = 118  # adjust this value to change the left position
@@ -44,8 +43,11 @@ func _process(delta):
 
 
 func _on_Player_body_entered(body):
-	body.queue_free()
-	emit_signal("catch")
-	lives -= 1
-	if lives == 0:
+	if body.drop_type == "drop":
+		emit_signal("catch")
+		body.queue_free()
+	elif body.drop_type == "bomb":
 		emit_signal("death")
+		body.queue_free()
+
+	

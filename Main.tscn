@@ -1,13 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://bf1pyf1bi8pa8"]
+[gd_scene load_steps=17 format=3 uid="uid://bf1pyf1bi8pa8"]
 
 [ext_resource type="PackedScene" uid="uid://bovbts750pvhq" path="res://Player.tscn" id="1_0ugsw"]
 [ext_resource type="Script" path="res://Main.gd" id="1_fac4u"]
 [ext_resource type="PackedScene" uid="uid://cqxri1bmq7bq" path="res://Drop.tscn" id="2_nmgsj"]
 [ext_resource type="Texture2D" uid="uid://b6wgdsbqbfriw" path="res://Sprites/1.png" id="3_t2ybi"]
 [ext_resource type="PackedScene" uid="uid://o6ch38h6uqwa" path="res://HUD.tscn" id="4_6uo3d"]
-[ext_resource type="AudioStream" uid="uid://b5nignjyjboy0" path="res://Music/8Bit Mini Gamer Loop.wav" id="5_6gbii"]
+[ext_resource type="AudioStream" uid="uid://bh8b3rrss8rfa" path="res://Music/Hyper.wav" id="6_0pjnb"]
 [ext_resource type="AudioStream" uid="uid://cy3neynngenid" path="res://Sounds/Fruit collect 1.wav" id="6_e7oi3"]
 [ext_resource type="Script" path="res://FPSCounter.gd" id="8_2krea"]
+[ext_resource type="AudioStream" uid="uid://d2fuglu7ornla" path="res://Sounds/Explosion 7 - Sound effects Pack 2.wav" id="9_57nqe"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sugej"]
 blend_mode = 2
@@ -72,6 +73,8 @@ texture = ExtResource("3_t2ybi")
 
 [node name="Player" parent="." instance=ExtResource("1_0ugsw")]
 position = Vector2(160, 164)
+collision_mask = 2
+monitoring = false
 
 [node name="Spawners" type="Node2D" parent="."]
 
@@ -85,8 +88,7 @@ position = Vector2(160, -13)
 position = Vector2(207, -13)
 
 [node name="SpawnTimer" type="Timer" parent="Spawners"]
-wait_time = 0.5
-autostart = true
+wait_time = 0.2
 
 [node name="InvisibleWalls" type="Node2D" parent="."]
 
@@ -105,27 +107,22 @@ position = Vector2(344, 92)
 shape = SubResource("RectangleShape2D_bbl3a")
 
 [node name="Area2D" type="Area2D" parent="InvisibleWalls"]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InvisibleWalls/Area2D"]
 position = Vector2(161.5, 204.5)
 shape = SubResource("RectangleShape2D_8e8ss")
 
 [node name="HUD" parent="." instance=ExtResource("4_6uo3d")]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_bottom = 0.0
-offset_left = 181.0
-offset_right = 181.0
-grow_horizontal = 0
-grow_vertical = 1
+offset_left = 160.0
+offset_right = 160.0
+size_flags_horizontal = 8
 
 [node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_6gbii")
-autoplay = true
+stream = ExtResource("6_0pjnb")
 
 [node name="Catch" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_e7oi3")
-volume_db = 10.0
 
 [node name="FPSCounter" type="Label" parent="."]
 visible = false
@@ -133,6 +130,11 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("8_2krea")
 
+[node name="DeathExplosion" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_57nqe")
+
 [connection signal="catch" from="Player" to="." method="_on_player_catch"]
+[connection signal="death" from="Player" to="." method="_on_player_death"]
 [connection signal="timeout" from="Spawners/SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="body_entered" from="InvisibleWalls/Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="start" from="HUD" to="." method="_on_hud_start"]
