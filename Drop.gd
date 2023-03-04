@@ -4,7 +4,11 @@ extends RigidBody2D
 
 func _ready():
 	angular_velocity = randi() % 40
-	var random_fruit = randi() % 59
+	if randi() % 2 == 0:
+		angular_velocity = randi() % 40
+	else:
+		var velo = randi() % 40
+		angular_velocity = velo * -1
 	choose_drop()
 	
 	
@@ -16,4 +20,3 @@ func choose_drop():
 	else:
 		$AnimatedSprite2D.set_frame(1)
 		drop_type = "drop"
-

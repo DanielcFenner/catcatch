@@ -30,24 +30,17 @@ func game_over():
 	
 
 func _on_spawn_timer_timeout():
+	var base_spawn_time = 0.2
 	if score < 10:	
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.8
-	elif score < 20:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.7
-	elif score < 20:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.6
-	elif score < 30:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.5
-	elif score < 40:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.4
+		$Spawners/SpawnTimer.wait_time = randf() * 0.6 + base_spawn_time
+	elif score < 25:
+		$Spawners/SpawnTimer.wait_time = randf() * 0.5 + base_spawn_time
 	elif score < 50:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.3
+		$Spawners/SpawnTimer.wait_time = randf() * 0.4 + base_spawn_time
 	elif score < 75:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.2
-	elif score < 100:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25 + 0.1
+		$Spawners/SpawnTimer.wait_time = randf() * 0.3 + base_spawn_time
 	else:
-		$Spawners/SpawnTimer.wait_time = randf() * 0.25
+		$Spawners/SpawnTimer.wait_time = randf() * 0.2 + base_spawn_time
 
 	var random_spawn_location = spawns[randi() % 3]
 	
